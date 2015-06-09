@@ -40,7 +40,7 @@ public class LedService {
 		colors.put(Color.RED, RaspiPin.GPIO_05);
 		colors.put(Color.GREEN, RaspiPin.GPIO_06);
 		colors.put(Color.BLUE, RaspiPin.GPIO_07);
-		pins.put(1, colors2);
+		pins.put(2, colors2);
 	}
 
 	private Pin getPinForStripAndColor(Integer stripNo, Color color) {

@@ -10,7 +10,7 @@ public class HomeController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String get() {
-		return "";
+		return "Hello World";
 	}
 
 }

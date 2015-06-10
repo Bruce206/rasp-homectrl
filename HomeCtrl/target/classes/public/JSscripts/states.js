@@ -1,4 +1,4 @@
-skinapp.config(function($stateProvider, $urlRouterProvider) {
+homectrlapp.config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
 

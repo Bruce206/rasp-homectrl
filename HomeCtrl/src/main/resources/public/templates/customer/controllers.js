@@ -1,4 +1,4 @@
-skinapp.factory('Customer', function($resource) {
+homectrlapp.factory('Customer', function($resource) {
 	return $resource('/customer', {}, {
 		'list': {
 			url: '/customer/list',
@@ -8,7 +8,7 @@ skinapp.factory('Customer', function($resource) {
 	});      
 });
 
-skinapp.controller('CustomerListCtrl', function($scope, Customer, $http) {
+homectrlapp.controller('CustomerListCtrl', function($scope, Customer, $http) {
 	$scope.customers = Customer.list();
 	$scope.remove = function(customer){
 
@@ -22,7 +22,7 @@ skinapp.controller('CustomerListCtrl', function($scope, Customer, $http) {
 	}
 });
 
-skinapp.controller('CustomerDetailCtrl', function($scope, customer) {
+homectrlapp.controller('CustomerDetailCtrl', function($scope, customer) {
 	$scope.customer = customer;
 
 });

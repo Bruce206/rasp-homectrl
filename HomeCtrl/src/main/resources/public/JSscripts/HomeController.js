@@ -1,3 +1,3 @@
-var skinapp = angular.module('skinapp', ["ngResource", "ui.router"]);
+var skinapp = angular.module('homectrlapp', ["ngResource", "ui.router"]);
 
 

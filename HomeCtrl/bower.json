@@ -1,0 +1,18 @@
+{
+  "name": "SkinOnline",
+  "version": "0.1",
+  "authors": [
+    "Bruce206 <Manuel.Bruss@gmail.com>"
+  ],
+  "description": "Skin Online",
+  "dependencies": {
+    "angular-bootstrap": "latest",
+    "angular": "latest",
+    "angular-resource": "latest",
+    "angular-route": "latest",
+    "bootstrap": "latest",
+    "jquery-ui": "latest",
+    "underscore": "latest",
+    "angular-ui-router": "latest"
+  }
+}

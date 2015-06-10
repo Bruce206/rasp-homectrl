@@ -21,4 +21,14 @@ public class LedController {
 		ledService.setColorIntensity(strip, Color.valueOf(color), intensity);
 	}
 
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public void setSingleColor() {
+		ledService.testRed();
+	}
+
+	@RequestMapping(value = "/stop", method = RequestMethod.GET)
+	public void setSingleColorLow() {
+		ledService.stopRed();
+	}
+
 }

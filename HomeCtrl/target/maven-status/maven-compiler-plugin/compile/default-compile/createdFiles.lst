@@ -1,5 +1,8 @@
+de\bruss\homectrl\service\DummyLedService.class
 de\bruss\homectrl\service\LedService$Color.class
+de\bruss\homectrl\service\DummyLedService$Color.class
 de\bruss\homectrl\Application.class
 de\bruss\homectrl\Controller\HomeController.class
+de\bruss\homectrl\service\ProdLedService.class
 de\bruss\homectrl\Controller\LedController.class
 de\bruss\homectrl\service\LedService.class

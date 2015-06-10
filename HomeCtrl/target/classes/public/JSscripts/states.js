@@ -6,7 +6,7 @@ homectrlapp.config(function($stateProvider, $urlRouterProvider) {
         .state('led', {
            url: '/control',
            controller: "LedController",
-           template: "templates/led.html"
+           templateUrl: "../templates/led.html"
         })
 
 });

@@ -11,4 +11,35 @@ public class DummyLedService extends LedService {
 		RED, GREEN, BLUE
 	}
 
+	@Override
+	public void testRed() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void stopRed() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setColorIntensity(Integer stripNo, de.bruss.homectrl.service.LedService.Color color, Integer intensity) throws InterruptedException {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public String getColorsRGBForStripe(int stripe) {
+		return null;
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setColorsRGBForStripe(int stripe, String rgb) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

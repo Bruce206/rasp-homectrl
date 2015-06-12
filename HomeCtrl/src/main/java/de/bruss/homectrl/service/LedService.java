@@ -1,48 +1,19 @@
 package de.bruss.homectrl.service;
 
-import java.util.HashMap;
-
-import com.pi4j.io.gpio.GpioPinOutput;
-
-public class LedService {
-	protected HashMap<Integer, HashMap<Color, GpioPinOutput>> pins = new HashMap<Integer, HashMap<Color, GpioPinOutput>>();
-
-	static final public Integer MIN_INTENSITY = 0; // don't change!
-	static final public Integer MAX_INTENSITY = 100;
+public abstract class LedService {
 
 	public enum Color {
 		RED, GREEN, BLUE
 	}
 
-	public HashMap<Integer, HashMap<Color, GpioPinOutput>> getPins() {
-		return pins;
-	}
+	public abstract void testRed();
 
-	public void setPins(HashMap<Integer, HashMap<Color, GpioPinOutput>> pins) {
-		this.pins = pins;
-	}
+	public abstract void stopRed();
 
-	public static Integer getMinIntensity() {
-		return MIN_INTENSITY;
-	}
+	public abstract void setColorIntensity(Integer stripNo, Color color, Integer intensity) throws InterruptedException;
 
-	public static Integer getMaxIntensity() {
-		return MAX_INTENSITY;
-	}
+	public abstract String getColorsRGBForStripe(int stripe);
 
-	public void setColorIntensity(int strip, Color valueOf, Integer intensity) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void testRed() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void stopRed() {
-		// TODO Auto-generated method stub
-
-	}
+	public abstract void setColorsRGBForStripe(int stripe, String rgb);
 
 }

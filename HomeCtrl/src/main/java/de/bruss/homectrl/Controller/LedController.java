@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,10 +36,14 @@ public class LedController {
 		ledService.stopRed();
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String getInformation() {
-
-		return info.toString();
-
+	@RequestMapping(value = "/{stripe}", method = RequestMethod.GET)
+	public String getSingleColorLow(@PathVariable int stripe) {
+		return ledService.getColorsRGBForStripe(stripe);
 	}
+
+	@RequestMapping(value = "/{stripe}", method = RequestMethod.POST)
+	public void setSingleColorLow(@PathVariable int stripe, @RequestParam String rgb) {
+		ledService.setColorsRGBForStripe(stripe, rgb);
+	}
+
 }

@@ -1,7 +1,40 @@
+<style>
+.sp-container {
+	border: none;
+	background-color: transparent;
+	display: block;
+}
+
+.sp-button-container {
+	display:none;
+}
+
+.sp-picker-container {
+	border: none;
+	width: 100%;
+}
+
+.sp-input {
+  font-size: 14px !important;
+  border: none;
+  padding: 4px 5px;
+  margin: 0;
+  width: 100%;
+  background: transparent;
+  border-radius: 0px;
+  color: #fff;
+}
+</style>
+
 <div class="container">
 	<div class="row">
-		<div class="column-xs-12">
-			Hallo Welt
+		<div class="col-md-6" style="text-align: center;">
+		<h2>Bar-Lights</h2>
+			<spectrum-colorpicker ng-model="color1" options="options"></spectrum-colorpicker>
+		</div>
+		<div class="col-md-6" style="text-align: center;">
+		<h2>Aquarium-Moonlights</h2>
+			<spectrum-colorpicker ng-model="color2" options="options"></spectrum-colorpicker>
 		</div>
 	</div>
 </div>

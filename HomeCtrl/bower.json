@@ -13,6 +13,7 @@
     "bootstrap": "latest",
     "jquery-ui": "latest",
     "underscore": "latest",
-    "angular-ui-router": "latest"
+    "angular-ui-router": "latest",
+    "spectrum" : "latest"
   }
 }

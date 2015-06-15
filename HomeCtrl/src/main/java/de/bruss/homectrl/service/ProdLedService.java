@@ -1,6 +1,5 @@
 package de.bruss.homectrl.service;
 
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,11 +13,14 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
 import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.SoftPwm;
+
+import de.bruss.homectrl.led.LedStripe;
+import de.bruss.homectrl.led.LedStripe.Color;
+import de.bruss.homectrl.led.LedStripe.StripeColor;
 
 @Service
 @Profile("Raspberry")
@@ -29,83 +31,43 @@ public class ProdLedService extends LedService {
 
 	final GpioController gpio = GpioFactory.getInstance();
 
-	protected HashMap<Integer, HashMap<Color, GpioPinDigitalOutput>> pins = new HashMap<Integer, HashMap<Color, GpioPinDigitalOutput>>();
-
-	private HashMap<Integer, Integer> pinIdToIntensityMapping = new HashMap<Integer, Integer>();
-
 	@PostConstruct
-	private void init() {
+	protected void init() {
+		initStripes();
 
-		for (int i = 2; i <= 7; i++) {
-			pinIdToIntensityMapping.put(i, 0);
-		}
+		getStripeById(1).getColor(Color.RED).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "Strip 1 RED", PinState.LOW));
+		getStripeById(1).getColor(Color.GREEN).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "Strip 1 GREEN", PinState.LOW));
+		getStripeById(1).getColor(Color.BLUE).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "Strip 1 BLUE", PinState.LOW));
 
-		HashMap<Color, GpioPinDigitalOutput> colors = new HashMap<Color, GpioPinDigitalOutput>();
-		colors.put(Color.RED, gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "Strip 1 RED", PinState.LOW));
-		colors.put(Color.GREEN, gpio.provisionDigitalOutputPin(RaspiPin.GPIO_03, "Strip 1 GREEN", PinState.HIGH));
-		colors.put(Color.BLUE, gpio.provisionDigitalOutputPin(RaspiPin.GPIO_04, "Strip 1 BLUE", PinState.LOW));
-		pins.put(1, colors);
-
-		HashMap<Color, GpioPinDigitalOutput> colors2 = new HashMap<Color, GpioPinDigitalOutput>();
-		colors2.put(Color.RED, gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "Strip 2 RED", PinState.LOW));
-		colors2.put(Color.GREEN, gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, "Strip 2 GREEN", PinState.LOW));
-		colors2.put(Color.BLUE, gpio.provisionDigitalOutputPin(RaspiPin.GPIO_07, "Strip 2 BLUE", PinState.LOW));
-		pins.put(2, colors2);
-	}
-
-	public HashMap<Integer, HashMap<Color, GpioPinDigitalOutput>> getPins() {
-		return pins;
-	}
-
-	public void setPins(HashMap<Integer, HashMap<Color, GpioPinDigitalOutput>> pins) {
-		this.pins = pins;
-	}
-
-	public void testRed() {
-		logger.error("activating red");
-		pins.get(1).get(Color.RED).setState(PinState.HIGH);
-	}
-
-	public void stopRed() {
-		((GpioPinDigitalOutput) pins.get(1).get(Color.RED)).setState(PinState.LOW);
-	}
-
-	private GpioPinDigitalOutput getPinForStripAndColor(Integer stripNo, Color color) {
-		try {
-			return pins.get(stripNo).get(color);
-		} catch (NullPointerException npe) {
-			return null;
-		}
+		getStripeById(2).getColor(Color.RED).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_05, "Strip 2 RED", PinState.LOW));
+		getStripeById(2).getColor(Color.GREEN).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_06, "Strip 2 GREEN", PinState.LOW));
+		getStripeById(2).getColor(Color.BLUE).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_07, "Strip 2 BLUE", PinState.LOW));
 	}
 
 	@Override
-	public void setColorIntensity(Integer stripNo, Color color, Integer intensity) throws InterruptedException {
-		GpioPinDigitalOutput pin = getPinForStripAndColor(stripNo, color);
-		pwm(pin, intensity);
-	}
-
-	private void pwm(GpioPinDigitalOutput pin, Integer intensity) throws InterruptedException {
+	public void setColorIntensity(LedStripe stripe, Color color, Integer intensity) throws InterruptedException {
 		Gpio.wiringPiSetup();
 
-		SoftPwm.softPwmCreate(pin.getPin().getAddress(), 0, 100);
+		StripeColor stripeColor = stripe.getColor(color);
+
+		SoftPwm.softPwmCreate(stripeColor.getPin().getPin().getAddress(), 0, 100);
 
 		double intensityPercent = 100 * ((double) intensity / 255);
 		logger.error("intensity: " + intensity + " percent: " + intensityPercent);
 
-		SoftPwm.softPwmWrite(pin.getPin().getAddress(), (int) Math.round(intensityPercent));
+		SoftPwm.softPwmWrite(stripeColor.getPin().getPin().getAddress(), (int) Math.round(intensityPercent));
 
-		pinIdToIntensityMapping.put(pin.getPin().getAddress(), intensity);
+		stripeColor.setIntensity(intensity);
 	}
 
 	@Override
 	public String getColorsRGBForStripe(int stripeId) {
-		System.out.println(pins.get(stripeId).get(Color.RED).getProperties());
-		HashMap<Color, GpioPinDigitalOutput> stripe = pins.get(stripeId);
-		return "rgb(" + stripe.get(Color.RED).getPin().getAddress() + ", " + stripe.get(Color.GREEN).getPin().getAddress() + ", " + stripe.get(Color.BLUE).getPin().getAddress() + ")";
+		LedStripe stripe = getStripeById(stripeId);
+		return "rgb(" + stripe.getColor(Color.RED).getIntensity() + ", " + stripe.getColor(Color.GREEN).getIntensity() + ", " + stripe.getColor(Color.BLUE).getIntensity() + ")";
 	}
 
 	@Override
-	public void setColorsRGBForStripe(int stripe, String rgb) {
+	public void setColorsRGBForStripe(int stripeId, String rgb) {
 
 		Pattern regexPattern = Pattern.compile("(\\d{1,3})\\,.(\\d{1,3})\\,.(\\d{1,3})", Pattern.CASE_INSENSITIVE);
 		Matcher regexMatcher = regexPattern.matcher(rgb);
@@ -116,6 +78,7 @@ public class ProdLedService extends LedService {
 			Integer blueIntensity = Integer.parseInt(regexMatcher.group(3));
 
 			try {
+				LedStripe stripe = getStripeById(stripeId);
 				setColorIntensity(stripe, Color.RED, redIntensity);
 				setColorIntensity(stripe, Color.GREEN, greenIntensity);
 				setColorIntensity(stripe, Color.BLUE, blueIntensity);
@@ -127,4 +90,5 @@ public class ProdLedService extends LedService {
 		}
 
 	}
+
 }

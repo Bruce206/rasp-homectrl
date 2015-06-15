@@ -24,17 +24,30 @@
   border-radius: 0px;
   color: #fff;
 }
+
+.sp-palette-container {
+  border-right: none;
+}
+
+.sp-palette .sp-thumb-el {
+  width: 50px;
+  height: 50px;
+}
+
+.sp-palette {
+	max-width: none;
+}
 </style>
 
 <div class="container">
 	<div class="row">
 		<div class="col-md-6" style="text-align: center;">
 		<h2>Bar-Lights</h2>
-			<spectrum-colorpicker ng-model="color1" options="options"></spectrum-colorpicker>
+			<spectrum-colorpicker ng-model="color1" options="options1" on-change="changed(1)"></spectrum-colorpicker>
 		</div>
 		<div class="col-md-6" style="text-align: center;">
 		<h2>Aquarium-Moonlights</h2>
-			<spectrum-colorpicker ng-model="color2" options="options"></spectrum-colorpicker>
+			<spectrum-colorpicker ng-model="color2" options="options2" on-change="changed(2)"></spectrum-colorpicker>
 		</div>
 	</div>
 </div>

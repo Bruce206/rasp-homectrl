@@ -1,19 +1,37 @@
 package de.bruss.homectrl.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import de.bruss.homectrl.led.LedStripe;
+import de.bruss.homectrl.led.LedStripe.Color;
+
 public abstract class LedService {
 
-	public enum Color {
-		RED, GREEN, BLUE
-	}
+	List<LedStripe> stripes = new ArrayList<LedStripe>();
 
-	public abstract void testRed();
+	@PostConstruct
+	protected abstract void init();
 
-	public abstract void stopRed();
-
-	public abstract void setColorIntensity(Integer stripNo, Color color, Integer intensity) throws InterruptedException;
+	public abstract void setColorIntensity(LedStripe stripNo, Color color, Integer intensity) throws InterruptedException;
 
 	public abstract String getColorsRGBForStripe(int stripe);
 
 	public abstract void setColorsRGBForStripe(int stripe, String rgb);
 
+	protected void initStripes() {
+		stripes.add(new LedStripe(1));
+		stripes.add(new LedStripe(2));
+	}
+
+	protected LedStripe getStripeById(int id) {
+		for (LedStripe stripe : stripes) {
+			if (stripe.getId() == id) {
+				return stripe;
+			}
+		}
+		return null;
+	}
 }

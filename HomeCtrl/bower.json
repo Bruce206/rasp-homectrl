@@ -1,5 +1,5 @@
 {
-  "name": "SkinOnline",
+  "name": "HomeCtrl",
   "version": "0.1",
   "authors": [
     "Bruce206 <Manuel.Bruss@gmail.com>"
@@ -14,6 +14,8 @@
     "jquery-ui": "latest",
     "underscore": "latest",
     "angular-ui-router": "latest",
-    "spectrum" : "latest"
+    "spectrum" : "latest",
+    "angular-screenfull" : "latest",
+    "angular-animate" : "latest"
   }
 }

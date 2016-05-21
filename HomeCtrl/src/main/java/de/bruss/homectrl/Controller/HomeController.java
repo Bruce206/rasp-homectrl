@@ -2,13 +2,19 @@ package de.bruss.homectrl.Controller;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.bruss.homectrl.service.ImagesService;
+
 @RestController
 @RequestMapping(value = "/api")
 public class HomeController {
+
+	@Autowired
+	ImagesService imagesService;
 
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -17,7 +23,7 @@ public class HomeController {
 	@RequestMapping(value = "/images", method = RequestMethod.GET)
 	public String getRandomImage() {
 		ObjectNode image = mapper.createObjectNode();
-		image.put("url", images[(int) (Math.random() * 3)]);
+		image.put("url", imagesService.getRandomImage().toString());
 		return image.toString();
 	}
 	// RCSwitch transmitter = new RCSwitch(RaspiPin.GPIO_00);

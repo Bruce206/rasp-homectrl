@@ -1,9 +1,13 @@
 de\bruss\homectrl\service\DummyLedService.class
+de\bruss\homectrl\service\ImagesService.class
 de\bruss\homectrl\Application.class
+de\bruss\homectrl\service\RCService.class
 de\bruss\homectrl\led\LedStripe$Color.class
 de\bruss\homectrl\Controller\HomeController.class
 de\bruss\homectrl\led\LedStripe$StripeColor.class
+de\bruss\homectrl\Controller\WirelessController.class
 de\bruss\homectrl\led\LedStripe.class
 de\bruss\homectrl\service\ProdLedService.class
 de\bruss\homectrl\Controller\LedController.class
 de\bruss\homectrl\service\LedService.class
+META-INF\MANIFEST.MF

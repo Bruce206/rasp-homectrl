@@ -20,13 +20,13 @@ homectrlapp.controller('HomeCtrl', function($scope, $rootScope, $timeout, $state
         if ($scope.timer) {
             $timeout.cancel($scope.timer);
         }
-        $scope.timer = $timeout(idleDetected, 3000); // time is in milliseconds
+        $scope.timer = $timeout(idleDetected, 5000); // time is in milliseconds
     }
 
     $scope.$watch("slideshow", function() {
         console.log("starting")
         if ($scope.slideshow) {
-            var INTERVAL = 5000;
+            var INTERVAL = 10000;
 
             function nextSlide() {
                 if ($scope.slideshow) {
@@ -41,6 +41,11 @@ homectrlapp.controller('HomeCtrl', function($scope, $rootScope, $timeout, $state
             loadSlides();
         }
     }, true);
+
+    $scope.goImages = function() {
+        $timeout.cancel($scope.timer);
+        idleDetected();
+    }
 });
 homectrlapp.directive('bgImage', function($window, $timeout) {
     return function(scope, element, attrs) {
@@ -72,9 +77,9 @@ homectrlapp.directive('bgImage', function($window, $timeout) {
         });
     }
 });
-homectrlapp.controller('LedController', function($scope, $rootScope, $timeout, stripe1, stripe2) {
+
+homectrlapp.controller('LivingroomController', function($scope, $rootScope, $timeout, stripe1, $http) {
     $scope.color1 = stripe1;
-    $scope.color2 = stripe2;
     $scope.options = {
         showInput: true,
         // flat: true, 
@@ -89,6 +94,61 @@ homectrlapp.controller('LedController', function($scope, $rootScope, $timeout, s
     $scope.options1 = angular.extend({}, $scope.options, {
         'color': $scope.color1
     });
+
+    $scope.togglePlug = function(groupAddress, plugAddress, targetState) {
+        console.log("switch")
+        
+        $http({
+            method: 'GET',
+            url: '/rc/switch',
+            params: {
+                   'groupAddress': groupAddress, 'plugAddress': plugAddress, 'targetState':targetState
+                },
+            }).then(function successCallback(response) {
+                // this callback will be called asynchronously
+                // when the response is available
+            }, function errorCallback(response) {
+                // called asynchronously if an error occurs
+                // or server returns response with an error status.
+            });
+    }
+
+    $scope.changed = function(stripe) {
+        if (!$scope.sending) {
+            $scope.sending = true;
+            if (stripe == 1) {
+                $.post('/led/1', {
+                    rgb: $scope.color1
+                }, function(data) {
+                    $scope.color1 = data;
+                });
+            } else {
+                $.post('/led/2', {
+                    rgb: $scope.color2
+                }, function(data) {
+                    $scope.color2 = data;
+                });
+            }
+            $timeout(function() {
+                $scope.sending = false;
+            }, 200);
+        }
+    }
+});
+
+homectrlapp.controller('AquariumController', function($scope, $rootScope, $timeout, stripe2) {
+    $scope.color2 = stripe2;
+    $scope.options = {
+        showInput: true,
+        // flat: true, 
+        preferredFormat: "rgb",
+        palette: [
+            ['black', 'white', 'blue', 'rgb(0, 254, 0)', 'red', 'rgb(95, 0, 254)']
+        ],
+        showPalette: true,
+        clickoutFiresChange: false,
+        maxSelectionSize: 0
+    }
     $scope.options2 = angular.extend({}, $scope.options, {
         'color': $scope.color2
     });

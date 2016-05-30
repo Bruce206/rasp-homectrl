@@ -3,11 +3,13 @@ package de.bruss.homectrl.Controller;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.bruss.homectrl.service.ImagesService;
+import de.bruss.homectrl.service.TemperatureService;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -15,6 +17,9 @@ public class HomeController {
 
 	@Autowired
 	ImagesService imagesService;
+
+	@Autowired
+	TemperatureService temperatureService;
 
 	ObjectMapper mapper = new ObjectMapper();
 
@@ -25,6 +30,20 @@ public class HomeController {
 		ObjectNode image = mapper.createObjectNode();
 		image.put("url", imagesService.getRandomImage().toString());
 		return image.toString();
+	}
+
+	@RequestMapping(value = "/temp", method = RequestMethod.GET)
+	public String getTemps() {
+		ObjectNode temps = mapper.createObjectNode();
+		temps.put("values", temperatureService.getTemperatures());
+		return temps.toString();
+	}
+
+	@RequestMapping(value = "/temp/{id}", method = RequestMethod.GET)
+	public String getTemps(@PathVariable String id) {
+		ObjectNode temps = mapper.createObjectNode();
+		temps.put("value", temperatureService.getTemperature(id));
+		return temps.toString();
 	}
 	// RCSwitch transmitter = new RCSwitch(RaspiPin.GPIO_00);
 	//

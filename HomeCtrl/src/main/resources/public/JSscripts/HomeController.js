@@ -20,13 +20,13 @@ homectrlapp.controller('HomeCtrl', function($scope, $rootScope, $timeout, $state
         if ($scope.timer) {
             $timeout.cancel($scope.timer);
         }
-        $scope.timer = $timeout(idleDetected, 5000); // time is in milliseconds
+        $scope.timer = $timeout(idleDetected, 120000); // time is in milliseconds
     }
 
     $scope.$watch("slideshow", function() {
         console.log("starting")
         if ($scope.slideshow) {
-            var INTERVAL = 10000;
+            var INTERVAL = 7000;
 
             function nextSlide() {
                 if ($scope.slideshow) {
@@ -136,8 +136,9 @@ homectrlapp.controller('LivingroomController', function($scope, $rootScope, $tim
     }
 });
 
-homectrlapp.controller('AquariumController', function($scope, $rootScope, $timeout, stripe2) {
-    $scope.color2 = stripe2;
+homectrlapp.controller('AquariumController', function($scope, $rootScope, $timeout, stripe2, temp) {
+    $scope.temp = JSON.parse(temp).value;
+	$scope.color2 = stripe2;
     $scope.options = {
         showInput: true,
         // flat: true, 

@@ -19,6 +19,9 @@ homectrlapp.config(function($stateProvider, $urlRouterProvider) {
            resolve: {
                 stripe2 : function() {
                     return $.get('/led/2');
+                },
+                temp : function() {
+                    return $.get('/api/temp/28-8000001e8c58');
                 }
            }
         })

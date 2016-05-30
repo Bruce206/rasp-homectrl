@@ -15,7 +15,6 @@ import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
-import com.pi4j.wiringpi.Gpio;
 import com.pi4j.wiringpi.SoftPwm;
 
 import de.bruss.homectrl.led.LedStripe;
@@ -31,8 +30,16 @@ public class ProdLedService extends LedService {
 
 	final GpioController gpio = GpioFactory.getInstance();
 
+	// private boolean wiringPiInitialized = false;
+
 	@PostConstruct
 	protected void init() {
+		System.out.println("Initializing ProdLedService...");
+		// if (!wiringPiInitialized) {
+		// wiringPiInitialized = true;
+		// Gpio.wiringPiSetup();
+		// }
+
 		initStripes();
 
 		getStripeById(1).getColor(Color.RED).setPin(gpio.provisionDigitalOutputPin(RaspiPin.GPIO_02, "Strip 1 RED", PinState.LOW));
@@ -46,8 +53,6 @@ public class ProdLedService extends LedService {
 
 	@Override
 	public void setColorIntensity(LedStripe stripe, Color color, Integer intensity) throws InterruptedException {
-		Gpio.wiringPiSetup();
-
 		StripeColor stripeColor = stripe.getColor(color);
 
 		SoftPwm.softPwmCreate(stripeColor.getPin().getPin().getAddress(), 0, 100);

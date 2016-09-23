@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.bruss.homectrl.service.RCService;
 
 @RestController
@@ -16,9 +18,16 @@ public class WirelessController {
 	@Autowired
 	RCService rcService;
 
+	ObjectMapper mapper = new ObjectMapper();
+
 	@RequestMapping(value = "/switch")
 	public void switchPlug(@RequestParam String groupAddress, @RequestParam int plugAddress, @RequestParam boolean targetState) throws IOException {
 		rcService.switchPlug(groupAddress, plugAddress, targetState);
+	}
+
+	@RequestMapping(value = "/switch/status")
+	public String switchPlug(@RequestParam String groupAddress, @RequestParam int plugAddress) throws IOException {
+		return mapper.createObjectNode().put("status", rcService.switchStatus(groupAddress, plugAddress)).toString();
 	}
 
 	@RequestMapping(value = "/teston")

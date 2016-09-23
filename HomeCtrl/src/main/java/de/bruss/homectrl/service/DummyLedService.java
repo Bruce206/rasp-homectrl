@@ -3,6 +3,8 @@ package de.bruss.homectrl.service;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +16,13 @@ import de.bruss.homectrl.led.LedStripe.StripeColor;
 @Profile("PC")
 public class DummyLedService extends LedService {
 
+	Logger logger = LoggerFactory.getLogger(DummyLedService.class);
+
 	@Override
 	public void setColorIntensity(LedStripe stripe, Color color, Integer intensity) throws InterruptedException {
-
 		StripeColor stripeColor = stripe.getColor(color);
 		stripeColor.setIntensity(intensity);
+		logger.debug("Color " + color.name() + " set for stripe " + stripe.getId() + ": " + intensity);
 	}
 
 	@Override
@@ -40,12 +44,8 @@ public class DummyLedService extends LedService {
 			Integer blueIntensity = Integer.parseInt(regexMatcher.group(3));
 
 			try {
-				LedStripe stripe = getStripeById(stripeId);
-				setColorIntensity(stripe, Color.RED, redIntensity);
-				setColorIntensity(stripe, Color.GREEN, greenIntensity);
-				setColorIntensity(stripe, Color.BLUE, blueIntensity);
+				setColorsRGBForStripe(stripeId, redIntensity, greenIntensity, blueIntensity);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

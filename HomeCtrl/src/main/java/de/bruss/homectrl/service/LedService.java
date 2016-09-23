@@ -34,4 +34,11 @@ public abstract class LedService {
 		}
 		return null;
 	}
+
+	public void setColorsRGBForStripe(int stripeId, int redIntensity, int greenIntensity, int blueIntensity) throws InterruptedException {
+		LedStripe stripe = getStripeById(stripeId);
+		setColorIntensity(stripe, Color.RED, redIntensity);
+		setColorIntensity(stripe, Color.GREEN, greenIntensity);
+		setColorIntensity(stripe, Color.BLUE, blueIntensity);
+	}
 }

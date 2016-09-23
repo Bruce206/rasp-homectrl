@@ -58,7 +58,7 @@ public class ProdLedService extends LedService {
 		SoftPwm.softPwmCreate(stripeColor.getPin().getPin().getAddress(), 0, 100);
 
 		double intensityPercent = 100 * ((double) intensity / 255);
-		logger.error("intensity: " + intensity + " percent: " + intensityPercent);
+		logger.debug("intensity: " + intensity + " percent: " + intensityPercent);
 
 		SoftPwm.softPwmWrite(stripeColor.getPin().getPin().getAddress(), (int) Math.round(intensityPercent));
 
@@ -88,7 +88,6 @@ public class ProdLedService extends LedService {
 				setColorIntensity(stripe, Color.GREEN, greenIntensity);
 				setColorIntensity(stripe, Color.BLUE, blueIntensity);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
